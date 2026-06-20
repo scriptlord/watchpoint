@@ -43,10 +43,14 @@ This repo is the **data layer and system architecture** — the foundation the a
 
 ```
 supabase/
-  migrations/0001_init.sql   the full database: tables, security rules, automation
-  seed.sql                   sample estate with demo data to try it out
-  tests/                     automated checks that the safety rules actually hold
+  migrations/0001_init.sql
+  seed.sql
+  tests/
 ```
+
+- `migrations/0001_init.sql` — the full database: tables, security rules, automation
+- `seed.sql` — sample estate with demo data to try it out
+- `tests/` — automated checks that the safety rules actually hold
 
 The database has 17 tables across four areas:
 
