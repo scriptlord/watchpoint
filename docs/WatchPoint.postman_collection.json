@@ -1,0 +1,363 @@
+{
+  "info": {
+    "name": "WatchPoint API",
+    "description": "WatchPoint — estate-first incident response. Supabase auto-generated REST + Auth APIs.\n\nQuick start:\n1. Run **Auth > Login** first. It saves the access token automatically.\n2. Then run any other request — they reuse that token.\n\nDemo estate: Magodo Brook Estate. Demo password for all users: watchpoint123.\nRoles: tunde=community_manager(+reporter), musa=responder, okoro=community_manager, chidi=resident, ngozi=resident(pending).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://gnezwcygecylcsvmdjuf.supabase.co" },
+    { "key": "apikey", "value": "sb_publishable_u14LV1r5cZ4MP4L_nrcfmQ_Yc52VhWQ" },
+    { "key": "access_token", "value": "" },
+    { "key": "user_email", "value": "tunde@example.com" },
+    { "key": "user_password", "value": "watchpoint123" },
+    { "key": "estate_id", "value": "11111111-1111-1111-1111-111111111111" },
+    { "key": "member_id", "value": "bbbbbbbb-0000-0000-0000-000000000001" },
+    { "key": "incident_id", "value": "cccccccc-0000-0000-0000-000000000001" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (saves access_token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const j = pm.response.json();",
+                  "if (j.access_token) {",
+                  "  pm.collectionVariables.set('access_token', j.access_token);",
+                  "  pm.test('logged in as ' + j.user.email, () => pm.expect(j.access_token).to.be.a('string'));",
+                  "} else {",
+                  "  pm.test('login failed', () => pm.expect.fail(JSON.stringify(j)));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/v1/token?grant_type=password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "token"],
+              "query": [{ "key": "grant_type", "value": "password" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "description": "Logs in and stores the access token in the collection variable {{access_token}}. Change {{user_email}} to log in as a different demo user."
+          }
+        },
+        {
+          "name": "Current user",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/auth/v1/user", "host": ["{{base_url}}"], "path": ["auth", "v1", "user"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Incidents",
+      "item": [
+        {
+          "name": "List incidents (my estate)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/incidents?select=*&order=created_at.desc",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "incidents"],
+              "query": [
+                { "key": "select", "value": "*" },
+                { "key": "order", "value": "created_at.desc" }
+              ]
+            },
+            "description": "RLS returns only incidents in estates you belong to."
+          }
+        },
+        {
+          "name": "Report incident",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": { "raw": "{{base_url}}/rest/v1/incidents", "host": ["{{base_url}}"], "path": ["rest", "v1", "incidents"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estate_id\": \"{{estate_id}}\",\n  \"reporter_member_id\": \"{{member_id}}\",\n  \"category\": \"security\",\n  \"description\": \"Suspicious person near Block 4 gate\",\n  \"client_token\": \"{{$guid}}\"\n}"
+            },
+            "description": "Creates a new alarm. category is one of: fire, medical, security, accident, intrusion, flood, other. client_token makes retries idempotent (no duplicate alarms)."
+          }
+        },
+        {
+          "name": "Get incident by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/incidents?id=eq.{{incident_id}}&select=*",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "incidents"],
+              "query": [
+                { "key": "id", "value": "eq.{{incident_id}}" },
+                { "key": "select", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Resolve incident (reporter only)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/incidents?id=eq.{{incident_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "incidents"],
+              "query": [{ "key": "id", "value": "eq.{{incident_id}}" }]
+            },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"resolved\"\n}" },
+            "description": "Only the member who raised the alarm can set status='resolved'. Logging in as anyone else returns 0 rows / is blocked by the DB."
+          }
+        },
+        {
+          "name": "Progress status (responder)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/incidents?id=eq.{{incident_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "incidents"],
+              "query": [{ "key": "id", "value": "eq.{{incident_id}}" }]
+            },
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"acknowledged\"\n}" },
+            "description": "Log in as musa@example.com (responder). status: acknowledged | en_route | on_scene."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community response",
+      "item": [
+        {
+          "name": "Confirm an incident",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": { "raw": "{{base_url}}/rest/v1/incident_confirmations", "host": ["{{base_url}}"], "path": ["rest", "v1", "incident_confirmations"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"incident_id\": \"{{incident_id}}\",\n  \"confirmer_member_id\": \"REPLACE_WITH_YOUR_MEMBER_ID\",\n  \"response\": \"confirm\",\n  \"note\": \"I can see it too\"\n}"
+            },
+            "description": "Log in as a verified member who is NOT the reporter (e.g. chidi). response: confirm | deny | unsure. You can't confirm your own report."
+          }
+        },
+        {
+          "name": "Dispute a resolution",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": { "raw": "{{base_url}}/rest/v1/incident_resolution_disputes", "host": ["{{base_url}}"], "path": ["rest", "v1", "incident_resolution_disputes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"incident_id\": \"{{incident_id}}\",\n  \"disputer_member_id\": \"REPLACE_WITH_YOUR_MEMBER_ID\",\n  \"note\": \"This is not actually resolved\"\n}"
+            },
+            "description": "Two verified disputes flip a resolved incident to 'resolution_disputed' for review."
+          }
+        },
+        {
+          "name": "Incident timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/incident_updates?incident_id=eq.{{incident_id}}&select=*&order=created_at.asc",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "incident_updates"],
+              "query": [
+                { "key": "incident_id", "value": "eq.{{incident_id}}" },
+                { "key": "select", "value": "*" },
+                { "key": "order", "value": "created_at.asc" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "People & households",
+      "item": [
+        {
+          "name": "List members (my estate)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/estate_members?select=id,role,is_verified,status,house_address",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "estate_members"],
+              "query": [{ "key": "select", "value": "id,role,is_verified,status,house_address" }]
+            }
+          }
+        },
+        {
+          "name": "List households (organogram)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/households?select=unit_label,landlord_member_id,address",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "households"],
+              "query": [{ "key": "select", "value": "unit_label,landlord_member_id,address" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Visitors",
+      "item": [
+        {
+          "name": "Send one-off visitor pass (to security)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": { "raw": "{{base_url}}/rest/v1/visitor_passes", "host": ["{{base_url}}"], "path": ["rest", "v1", "visitor_passes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estate_id\": \"{{estate_id}}\",\n  \"host_member_id\": \"{{member_id}}\",\n  \"visitor_name\": \"DHL courier\"\n}"
+            },
+            "description": "Visible to the host and security only — not the community manager. Logged to audit."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "item": [
+        {
+          "name": "List maintenance tickets",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/maintenance_tickets?select=*&order=created_at.desc",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "maintenance_tickets"],
+              "query": [
+                { "key": "select", "value": "*" },
+                { "key": "order", "value": "created_at.desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Report maintenance",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "url": { "raw": "{{base_url}}/rest/v1/maintenance_tickets", "host": ["{{base_url}}"], "path": ["rest", "v1", "maintenance_tickets"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estate_id\": \"{{estate_id}}\",\n  \"reporter_member_id\": \"{{member_id}}\",\n  \"category\": \"streetlight\",\n  \"description\": \"Streetlight out on Block 4 road\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit (manager only)",
+      "item": [
+        {
+          "name": "List audit log",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/audit_log?select=*&order=created_at.desc&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "audit_log"],
+              "query": [
+                { "key": "select", "value": "*" },
+                { "key": "order", "value": "created_at.desc" },
+                { "key": "limit", "value": "50" }
+              ]
+            },
+            "description": "Only community_manager / platform_admin can read this. As a resident you get an empty array."
+          }
+        }
+      ]
+    }
+  ]
+}
