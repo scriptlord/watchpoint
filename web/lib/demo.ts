@@ -23,3 +23,12 @@ export const DEMO_PEOPLE: DemoPerson[] = [
 ];
 
 export const DEMO_GROUPS: DemoPerson["group"][] = ["Residents", "Security", "Managers", "Pending"];
+
+// Used by the public signup flow (the one demo estate + its blocks/households).
+export const DEMO_ESTATE_ID = "11111111-1111-1111-1111-111111111111";
+export const DEMO_ESTATE_NAME = "Magodo Brook Estate";
+export const BLOCKS: { id: string; label: string; manager: string }[] = [
+  { id: "dddddddd-0000-0000-0000-000000000001", label: "Block 4", manager: "Tunde Adeyemi" },
+  { id: "dddddddd-0000-0000-0000-000000000002", label: "Block 7", manager: "Mrs. Okoro" },
+  { id: "dddddddd-0000-0000-0000-000000000003", label: "Block 12", manager: "Mr. Bello" },
+];

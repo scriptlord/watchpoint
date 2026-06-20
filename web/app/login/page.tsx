@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { DEMO_GROUPS, DEMO_PASSWORD, DEMO_PEOPLE } from "@/lib/demo";
@@ -103,6 +104,13 @@ export default function LoginPage() {
           Tip: open on two phones — one resident raises an alarm, the rest see it live.
         </p>
       </div>
+
+      <Link
+        href="/signup"
+        className="rounded-xl border border-line bg-card py-3.5 text-center text-[14px] font-semibold text-forest active:scale-[0.99]"
+      >
+        New to the estate? Create an account
+      </Link>
 
       {!showEmail ? (
         <button

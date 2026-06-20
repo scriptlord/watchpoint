@@ -7,7 +7,7 @@ import { Button, Spinner } from "@/components/ui";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { session, me, loading, pending, signOut } = useAuth();
+  const { session, me, loading, pending, signOut, reloadMe } = useAuth();
 
   useEffect(() => {
     if (!loading && !session) router.replace("/login");
@@ -32,9 +32,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             verify you before you can see the estate&apos;s reports.
           </p>
         </div>
-        <Button variant="secondary" onClick={() => signOut()}>
-          Sign out
-        </Button>
+        <div className="flex flex-col gap-2.5">
+          <Button onClick={() => reloadMe()}>I&apos;ve been verified — check again</Button>
+          <Button variant="ghost" onClick={() => signOut()}>
+            Sign out
+          </Button>
+        </div>
       </main>
     );
   }
