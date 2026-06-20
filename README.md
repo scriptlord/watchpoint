@@ -10,6 +10,15 @@ Built for Kingdom Hack 3.0 — Track D (Safety / Incident Management).
 
 ---
 
+## ▶ Try it live
+
+**Live prototype → https://watchpoint-alpha.vercel.app**  (installable: open on a phone and "Add to Home Screen").
+
+Tap any demo person to sign in (or use the email form with password `watchpoint123`).
+Best demo: open it on **two phones** — sign in as **Tunde** on one and **Chidi** on another, raise an alarm on Tunde's, and watch it land **live, with a siren**, on Chidi's. Add more residents to **confirm** it to "verified", or leave it unanswered to watch it **escalate** Residents → Security → Manager.
+
+---
+
 ## How it works
 
 1. **A resident reports an incident** — fire, medical, security, flood, and so on. One tap, optionally with a photo or voice note.
@@ -39,18 +48,19 @@ A tenant's visitor list is private to them and security — not shown to the man
 
 ## What's in this repository
 
-This repo is the **data layer and system architecture** — the foundation the app is built on. It's a Postgres database designed for Supabase.
+Two parts: the **Supabase database** (the system architecture) and the **web app** (the working prototype).
 
 ```
 supabase/
-  migrations/0001_init.sql
-  seed.sql
-  tests/
+  migrations/0001_init.sql        the full database: tables, security rules, automation
+  migrations/0002_escalation…sql  in-estate escalation engine (Residents → Security → Manager)
+  migrations/0003_profile…sql     estate-scoped profile visibility
+  seed.sql                        sample estate with demo data
+  tests/                          automated checks that the safety rules actually hold
+docs/
+  WatchPoint.postman_collection.json   import this to hit the live API yourself
+web/                              the Next.js PWA — the deployed prototype
 ```
-
-- `migrations/0001_init.sql` — the full database: tables, security rules, automation
-- `seed.sql` — sample estate with demo data to try it out
-- `tests/` — automated checks that the safety rules actually hold
 
 The database has 17 tables across four areas:
 
@@ -100,6 +110,16 @@ supabase db push                                # builds all the tables in that 
 bash supabase/tests/run_rls_tests.sh  # spins up a temporary database, builds it, and
                                       # checks every safety rule holds, then cleans up
 ```
+
+**Run the web app locally:**
+
+```bash
+cd web
+npm install
+npm run dev    # http://localhost:3000  (reads Supabase keys from web/.env.local)
+```
+
+The deployed version lives at **https://watchpoint-alpha.vercel.app** and redeploys automatically on every push.
 
 ---
 
