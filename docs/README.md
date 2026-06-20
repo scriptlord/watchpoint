@@ -19,6 +19,9 @@ Everything supporting the WatchPoint submission. Markdown files render with thei
 ## Phase 2 — Governance & Recognition (roadmap)
 - [watchpoint-phase-2-governance-recognition.md](watchpoint-phase-2-governance-recognition.md) · [PDF](WatchPoint_Phase_2_Governance_Recognition.pdf)
 
+## Screenshots
+[Login](screenshots/01-login.png) · [Feed + alarm](screenshots/02-feed.png) · [Incident detail (escalation)](screenshots/03-incident-detail.png) · [Organogram](screenshots/04-organogram.png) · [Visitors](screenshots/05-visitors.png) · [Roadmap](screenshots/06-roadmap.png)
+
 ## API
 - [WatchPoint.postman_collection.json](WatchPoint.postman_collection.json) — import to hit the live API
 
