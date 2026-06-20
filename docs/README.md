@@ -6,6 +6,9 @@ Everything supporting the WatchPoint submission. Markdown files render with thei
 - **Explanation:** [watchpoint-system-architecture.md](watchpoint-system-architecture.md) · [PDF](Foluso_Kayode_WatchPoint_System_Architecture.pdf)
 - Diagrams: [system stack](watchpoint-arch-system.svg) · [incident flow](watchpoint-arch-flow.svg) · [expansion path](watchpoint-arch-expansion.svg)
 
+## Business Design & GTM Strategy
+- [watchpoint-business-design.md](watchpoint-business-design.md) · [PDF](Foluso_Kayode_WatchPoint_Business_Design.pdf)
+
 ## Architecture Schematics (ERDs)
 - [Relationship diagram (plain-English)](watchpoint-erd.svg)
 - [Technical ERD (keys & relations)](watchpoint-technical-erd.svg)
