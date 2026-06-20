@@ -75,23 +75,26 @@ These rules hold even if someone bypasses the app and hits the database directly
 **Local (full Supabase on your machine):**
 
 ```bash
-supabase init      # first time only
-supabase start
-supabase db reset  # applies the database, then loads the demo data
+supabase init      # creates the Supabase config in this project (run once)
+supabase start     # boots the local database, auth, and dashboard in Docker
+supabase db reset  # builds all the tables, then loads the demo data from seed.sql
 ```
+
+After `supabase start`, open the dashboard at <http://localhost:54323> to browse the tables.
 
 **Hosted Supabase project:**
 
 ```bash
-supabase link --project-ref <your-project-ref>
-supabase db push   # applies the database
-# then paste seed.sql into the SQL editor for demo data
+supabase link --project-ref <your-project-ref>  # connects this code to your online project
+supabase db push                                # builds all the tables in that online project
+# then paste seed.sql into the project's SQL editor to load the demo data
 ```
 
-**Run the safety-rule tests** (needs Postgres 17 locally):
+**Run the safety-rule tests** (needs Postgres 17 installed locally):
 
 ```bash
-bash supabase/tests/run_rls_tests.sh
+bash supabase/tests/run_rls_tests.sh  # spins up a temporary database, builds it, and
+                                      # checks every safety rule holds, then cleans up
 ```
 
 ---
