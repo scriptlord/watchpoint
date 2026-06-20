@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* ── WatchPoint "calm authority" design tokens ───────────────── */
+@theme {
+  --color-paper: #f5f1e8;
+  --color-ink: #1c2b24;
+  --color-forest: #2e5e45;
+  --color-forest-deep: #234b37;
+  --color-forest-soft: #e2ece5;
+  --color-alarm: #c8442e;
+  --color-alarm-soft: #f6e7e3;
+  --color-amber: #b87a1a;
+  --color-amber-soft: #f6ead1;
+  --color-card: #fdfbf7;
+  --color-line: #e0d8c8;
+  --color-muted: #6b7a6e;
+  --color-cream: #f8f6f1;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(28, 43, 36, 0.04);
+  --shadow-alarm: 0 10px 24px rgba(200, 68, 46, 0.32);
+  --shadow-lift: 0 8px 28px rgba(28, 43, 36, 0.12);
+}
+
+:root { color-scheme: light; }
+
+html, body { height: 100%; }
+
+body {
+  background: #e7e1d4;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* phone shell that centers the app on larger screens */
+.app-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  background: var(--color-paper);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.font-display { font-family: var(--font-display); }
+
+/* hide scrollbars inside the app for a native feel */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── motion ──────────────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(0.7); opacity: 0.7; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes slide-down {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes rise {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.animate-rise { animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-down { animation: slide-down 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
