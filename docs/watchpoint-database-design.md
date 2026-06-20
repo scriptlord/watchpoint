@@ -70,13 +70,13 @@ So `estate_members` decides:
 
 Example:
 
-If Foluso is a resident in Estate A, his `estate_members` record says:
+If Chidi is a resident in Estate A, his `estate_members` record says:
 
-- Foluso is attached to Estate A
-- Foluso's role is `resident`
-- Foluso is verified or not verified
-- Foluso can see Estate A reports, but cannot see Estate B reports
-- Foluso can raise incidents and confirm other people's incidents; he can resolve an alarm he raised himself, but cannot change the status of anyone else's incident
+- Chidi is attached to Estate A
+- Chidi's role is `resident`
+- Chidi is verified or not verified
+- Chidi can see Estate A reports, but cannot see Estate B reports
+- Chidi can raise incidents and confirm other people's incidents; he can resolve an alarm he raised himself, but cannot change the status of anyone else's incident
 
 If Musa is a security guard assigned to Estate A but does not live there, his `estate_members` record can still say:
 
