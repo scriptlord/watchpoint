@@ -53,6 +53,9 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-dvh flex-col gap-4 px-6 pb-8 pt-14">
       <header className="flex items-center gap-3">
+        <Link href="/welcome" className="text-2xl font-bold text-ink">
+          ‹
+        </Link>
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-forest">
           <span className="grid h-[18px] w-[18px] place-items-center rounded-full border-[3px] border-cream">
             <span className="h-1.5 w-1.5 rounded-full bg-cream" />
@@ -61,7 +64,8 @@ export default function LoginPage() {
         <span className="font-display text-3xl font-extrabold text-ink">WatchPoint</span>
       </header>
       <p className="-mt-2 text-sm font-medium text-muted">
-        Enter the demo as anyone in the estate
+        These are <b>ready-made test accounts</b> — tap anyone to explore instantly. Each is a
+        different role, so you&apos;ll see the app change.
       </p>
 
       {error && (

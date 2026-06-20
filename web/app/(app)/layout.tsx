@@ -10,7 +10,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { session, me, loading, pending, signOut, reloadMe } = useAuth();
 
   useEffect(() => {
-    if (!loading && !session) router.replace("/login");
+    if (!loading && !session) router.replace("/welcome");
   }, [loading, session, router]);
 
   if (loading || !session) {
