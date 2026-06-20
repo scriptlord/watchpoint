@@ -8,6 +8,7 @@ Everything supporting the WatchPoint submission. Markdown files render with thei
 
 ## Business Design & GTM Strategy
 - [watchpoint-business-design.md](watchpoint-business-design.md) · [PDF](WatchPoint_Business_Design.pdf)
+- **Pitch deck:** [WatchPoint_Pitch_Deck.pdf](WatchPoint_Pitch_Deck.pdf)
 
 ## Architecture Schematics (ERDs)
 - [Relationship diagram (plain-English)](watchpoint-erd.svg)
