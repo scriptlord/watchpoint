@@ -1,5 +1,16 @@
 import type { IncidentCategory, MemberRole } from "./types";
 
+/** True when a Supabase error is a unique-constraint violation (409 / 23505). */
+export function isDuplicate(e: unknown): boolean {
+  const err = e as { code?: string; message?: string } | null;
+  return err?.code === "23505" || /duplicate key|already exists/i.test(err?.message ?? "");
+}
+
+export function errMessage(e: unknown, fallback = "Something went wrong"): string {
+  const err = e as { message?: string } | null;
+  return err?.message || fallback;
+}
+
 export function timeAgo(iso: string): string {
   const s = (Date.now() - new Date(iso).getTime()) / 1000;
   if (s < 45) return "just now";

@@ -13,6 +13,7 @@ import {
 import { AppHeader } from "@/components/app-header";
 import { BottomNav } from "@/components/bottom-nav";
 import { Avatar, Button, Chip, Spinner } from "@/components/ui";
+import { errMessage, isDuplicate } from "@/lib/util";
 
 export default function PeoplePage() {
   const { me } = useAuth();
@@ -31,14 +32,14 @@ export default function PeoplePage() {
     load();
   }, [load]);
 
-  async function run(key: string, fn: () => Promise<void>, ok: string) {
+  async function run(key: string, fn: () => Promise<void>, ok: string, dup?: string) {
     setBusy(key);
     try {
       await fn();
       setToast(ok);
       await load();
     } catch (e) {
-      setToast(e instanceof Error ? e.message : "Something went wrong");
+      setToast(isDuplicate(e) ? (dup ?? "You've already done that.") : errMessage(e));
     } finally {
       setBusy(null);
       setTimeout(() => setToast(null), 3000);
@@ -133,7 +134,8 @@ export default function PeoplePage() {
                                     run(
                                       o.id,
                                       () => nudgeMember(me.estateId, o.id, me.memberId),
-                                      "Nudged the manager"
+                                      "Nudged the manager",
+                                      "You've already nudged about this person."
                                     )
                                   }
                                 >

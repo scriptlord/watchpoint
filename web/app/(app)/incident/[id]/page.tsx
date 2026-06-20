@@ -18,7 +18,7 @@ import {
 } from "@/lib/queries";
 import type { EscalationEvent, Incident, IncidentStatus, IncidentUpdate } from "@/lib/types";
 import { CATEGORY_META, CRITICAL_CATEGORIES, STATUS_LABEL } from "@/lib/types";
-import { CATEGORY_BADGE, CATEGORY_DOT, timeAgo } from "@/lib/util";
+import { CATEGORY_BADGE, CATEGORY_DOT, errMessage, isDuplicate, timeAgo } from "@/lib/util";
 import { Button, Chip, ConfidenceDots, Spinner, StatusBadge, cn } from "@/components/ui";
 import { EscalationLadder } from "@/components/escalation-ladder";
 
@@ -73,7 +73,7 @@ export default function IncidentDetailPage() {
       setToast(ok);
       await load();
     } catch (e) {
-      setToast(e instanceof Error ? e.message : "Something went wrong");
+      setToast(isDuplicate(e) ? "You've already responded to this alarm." : errMessage(e));
     } finally {
       setBusy(false);
       setTimeout(() => setToast(null), 3500);
